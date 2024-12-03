@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Generator</title>
+    <style>
+        /* Global Styles */
+      
+    /* Global Styles */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+        text-align: center;
+        background-color: rgb(236, 237, 245);
+    }
+
+    form {
+        margin: 10px auto;
+    max-width: 400px; /* Restrict maximum width */
+    width: 90%;       /* Ensure responsiveness */
+    text-align: center;
+    }
+
+    input[type="text"] {
+        padding: 10px;
+    font-size: 1rem;
+    width: 100%;      /* Makes it responsive */
+    max-width: 400px; /* Restrict maximum width */
+    margin: 10px 0;
+    box-sizing: border-box; /* Prevent overflow */
+    }
+
+    button {
+        padding: 12px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 100%;      /* Make button responsive */
+    max-width: 200px; /* Restrict maximum width */
+    margin: 10px auto; /* Center button */
+    display: block; 
+    }
+
+    #certificate-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 20px;
+       
+        min-height: 300px;  
+    }
+
+    canvas,
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    #download-link {
+        display: none;
+        margin-top: 20px;
+        font-size: 1rem;
+        color: white;
+        background-color: #28a745;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    #download-link:hover {
+        background-color: #218838;
+    }
+
+    /* Responsive Design for Small Devices */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        button {
+            font-size: 1rem;
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 1.2rem;
+        }
+
+        input[type="text"],
+        button {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <h1>Certificate Generator</h1>
+    <form id="certificate-form">
+        <label for="name"><b>Enter Your Name:</b></label>
+        <input type="text" id="name" name="name" required>
+        <button type="submit">Generate Certificate</button>
+    </form>
+
+    <h2>Generated Certificate</h2>
+    <canvas id="certificate-canvas" style="display: none;"></canvas>
+    <img id="certificate-image" src="" alt="Your Certificate" style="margin-left: 420px;">
+    <br>
+    <a id="download-link" href="#" download>Download Certificate</a>
+
+    <script>
+        document.getElementById('certificate-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Get the user's name input
+            const userName = document.getElementById('name').value;
+            if (!userName) {
+                alert("Please enter your name!");
+                return;
+            }
+
+            // Call the function to generate the certificate
+            generateCertificate(userName);
+        });
+
+        function generateCertificate(userName) {
+            const canvas = document.getElementById('certificate-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Load the certificate image
+            const certificateImage = new Image();
+            certificateImage.onload = function() {
+                console.log("Certificate image loaded successfully.");
+
+                // Set the canvas size to match the certificate image
+                canvas.width = certificateImage.width;
+                canvas.height = certificateImage.height;
+
+                // Draw the certificate image on the canvas
+                ctx.drawImage(certificateImage, 0, 0);
+
+                // Set the font properties for the name
+                ctx.font = '30px Arial';
+                ctx.fillStyle = 'black';
+                ctx.textAlign = 'center';
+
+                // Adjust the vertical position dynamically
+                const textX = canvas.width / 2;
+                const textY = canvas.height * 0.60;
+
+                // Overlay the user's name on the certificate
+                ctx.fillText(userName, textX, textY);
+
+                // Display the generated image
+                const imgElement = document.getElementById('certificate-image');
+                imgElement.src = canvas.toDataURL('image/png');
+                imgElement.style.display = 'block';
+
+                // Enable the download link
+                const downloadLink = document.getElementById('download-link');
+                downloadLink.href = canvas.toDataURL('image/png');
+                downloadLink.style.display = 'inline';
+            };
+
+            // Handle errors if the image fails to load
+            certificateImage.onerror = function() {
+                console.error("Error loading the certificate image.");
+                alert("Error loading the certificate image. Please check the image path.");
+            };
+
+            // Set the image source (ensure path is correct)
+            certificateImage.src = '/public/newcertificate.png';  // Update with the correct image path
+        }
+    </script>
+</body>
+</html>
