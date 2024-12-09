@@ -40,5 +40,5 @@ function generateCertificate(userName) {
     };
     
     // Set the source of the image (your certificate image)
-    certificateImage.src = '/public/newcertificate.png'; // Replace with the path to your certificate image
+    certificateImage.src = '/public/newcert1.png'; // Replace with the path to your certificate image
 }
