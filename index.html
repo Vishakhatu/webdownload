@@ -1,206 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificate Generator</title>
+<html>
+  <head>
+    <title>Fullscreen PDF</title>
     <style>
-
-    body {
-        font-family: Arial, sans-serif;
+      html, body {
         margin: 0;
-        padding: 20px;
-        box-sizing: border-box;
-        text-align: center;
-        background-color: rgb(236, 237, 245);
-    }
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+      }
 
-    form {
-        margin: 10px auto;
-        max-width: 400px;
-        width: 90%;
-        text-align: center;
-    }
-
-    input[type="text"] {
-        padding: 10px;
-        font-size: 1rem;
-        width: 100%;
-        max-width: 400px;
-        margin: 10px 0;
-        box-sizing: border-box;
-    }
-
-    button {
-        padding: 12px 20px;
-        font-size: 1rem;
-        cursor: pointer;
-        background-color: #007bff;
-        color: white;
+      iframe {
+        height: 100vh;
+        width: 100vw;
         border: none;
-        border-radius: 5px;
-        width: 100%;
-        max-width: 200px;
-        margin: 10px auto;
-        display: block;
-    }
+      }
 
-    #certificate-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        margin-top: 20px;
-        min-height: 300px;  
-    }
-
-    canvas,
-    img {
-        max-width: 100%;
-        height: auto;
-    }
-
-    #download-link {
-        display: none;
-        margin-top: 20px;
-        font-size: 1rem;
+      /* Floating button */
+      .next-page-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #1976d2;
         color: white;
-        background-color: #28a745;
-        padding: 10px 20px;
+        padding: 12px 18px;
+        font-size: 18px;
+        border-radius: 10px;
         text-decoration: none;
-        border-radius: 5px;
-    }
-
-    #download-link:hover {
-        background-color: #218838;
-    }
-
-    @media (max-width: 768px) {
-        h1 {
-            font-size: 1.5rem;
-        }
-
-        button {
-            font-size: 1rem;
-            width: 100%;
-        }
-    }
-
-    @media (max-width: 480px) {
-        h1 {
-            font-size: 1.2rem;
-        }
-
-        input[type="text"],
-        button {
-            font-size: 0.9rem;
-        }
-    }
-
+        cursor: pointer;
+        z-index: 999;
+      }
     </style>
+  </head>
+  <body>
 
-</head>
-<body>
+    <!-- Fullscreen PDF -->
+    <iframe src="public/brochure2.pdf"></iframe>
 
-    <h1>Certificate Generator</h1>
-    
-    <form id="certificate-form">
-        <label for="name"><b>Enter Your Name:</b></label>
-        <input type="text" id="name" name="name" required>
-        <button type="submit">Generate Certificate</button>
-    </form>
+    <!-- Floating link button -->
+    <a href="/certificate.html" class="next-page-btn">Get Certificate</a>
 
-    <h2>Generated Certificate</h2>
-    <canvas id="certificate-canvas" style="display: none;"></canvas>
-    <img id="certificate-image" src="" alt="Your Certificate" style="margin-left: 420px;">
-    <br>
-    <a id="download-link" href="#" download>Download Certificate</a>
-
-    <!-- ⭐⭐⭐ Brochure Section Starts Here ⭐⭐⭐ -->
-    <h2 style="margin-top: 40px;">Brochures</h2>
-
-    <div id="brochure-section" style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 20px;">
-
-        <!-- Brochure 1 -->
-        <div class="brochure-card" style="background: white; padding: 15px; width: 250px; border-radius: 8px; 
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
-            <h3>Brochure 1</h3>
-            <iframe src="public/brochure1.pdf" width="100%" height="200px" style="border: none; border-radius: 5px;"></iframe>
-            <a href="public/brochure1.pdf" download 
-            style="display: inline-block; margin-top: 12px; padding: 8px 15px; background: #007bff; color: white; 
-            text-decoration: none; border-radius: 5px;">Download</a>
-        </div>
-
-        <!-- Brochure 2 -->
-        <div class="brochure-card" style="background: white; padding: 15px; width: 250px; border-radius: 8px; 
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
-            <h3>Brochure 2</h3>
-            <iframe src="public/brochure2.pdf" width="100%" height="200px" style="border: none; border-radius: 5px;"></iframe>
-            <a href="public/brochure2.pdf" download 
-            style="display: inline-block; margin-top: 12px; padding: 8px 15px; background: #007bff; color: white; 
-            text-decoration: none; border-radius: 5px;">Download</a>
-        </div>
-
-    </div>
-    <!-- ⭐⭐⭐ Brochure Section Ends Here ⭐⭐⭐ -->
-
-    <script>
-        document.getElementById('certificate-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const userName = document.getElementById('name').value;
-            if (!userName) {
-                alert("Please enter your name!");
-                return;
-            }
-
-            generateCertificate(userName);
-        });
-
-        function generateCertificate(userName) {
-            const canvas = document.getElementById('certificate-canvas');
-            const ctx = canvas.getContext('2d');
-            
-            const certificateImage = new Image();
-            certificateImage.onload = function() {
-                canvas.width = certificateImage.width;
-                canvas.height = certificateImage.height;
-
-                ctx.drawImage(certificateImage, 0, 0);
-
-                ctx.font = '30px Arial';
-                ctx.fillStyle = 'black';
-                ctx.textAlign = 'center';
-
-                const textX = canvas.width / 2;
-                const textY = canvas.height * 0.48;
-
-                ctx.fillText(userName, textX, textY);
-
-                const imgElement = document.getElementById('certificate-image');
-                imgElement.src = canvas.toDataURL('image/png');
-                imgElement.style.display = 'block';
-
-                const downloadLink = document.getElementById('download-link');
-                downloadLink.href = canvas.toDataURL('image/png');
-                downloadLink.style.display = 'inline';
-            };
-
-            certificateImage.onerror = function() {
-                alert("Error loading certificate image. Check the image path.");
-            };
-
-            certificateImage.src = '/public/certificateNew.jpg';
-        }
-    </script>
-
-</body>
+  </body>
 </html>
-
-
-
-
-
-
-
-
