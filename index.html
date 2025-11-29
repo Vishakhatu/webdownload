@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificate Generator</title>
     <style>
-        /* Global Styles */
-      
-    /* Global Styles */
+
     body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -19,32 +17,32 @@
 
     form {
         margin: 10px auto;
-    max-width: 400px; /* Restrict maximum width */
-    width: 90%;       /* Ensure responsiveness */
-    text-align: center;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
     }
 
     input[type="text"] {
         padding: 10px;
-    font-size: 1rem;
-    width: 100%;      /* Makes it responsive */
-    max-width: 400px; /* Restrict maximum width */
-    margin: 10px 0;
-    box-sizing: border-box; /* Prevent overflow */
+        font-size: 1rem;
+        width: 100%;
+        max-width: 400px;
+        margin: 10px 0;
+        box-sizing: border-box;
     }
 
     button {
         padding: 12px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    width: 100%;      /* Make button responsive */
-    max-width: 200px; /* Restrict maximum width */
-    margin: 10px auto; /* Center button */
-    display: block; 
+        font-size: 1rem;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        width: 100%;
+        max-width: 200px;
+        margin: 10px auto;
+        display: block;
     }
 
     #certificate-container {
@@ -53,7 +51,6 @@
         align-items: center;
         flex-direction: column;
         margin-top: 20px;
-       
         min-height: 300px;  
     }
 
@@ -78,7 +75,6 @@
         background-color: #218838;
     }
 
-    /* Responsive Design for Small Devices */
     @media (max-width: 768px) {
         h1 {
             font-size: 1.5rem;
@@ -100,11 +96,14 @@
             font-size: 0.9rem;
         }
     }
-</style>
+
+    </style>
 
 </head>
 <body>
+
     <h1>Certificate Generator</h1>
+    
     <form id="certificate-form">
         <label for="name"><b>Enter Your Name:</b></label>
         <input type="text" id="name" name="name" required>
@@ -117,18 +116,44 @@
     <br>
     <a id="download-link" href="#" download>Download Certificate</a>
 
+    <!-- ⭐⭐⭐ Brochure Section Starts Here ⭐⭐⭐ -->
+    <h2 style="margin-top: 40px;">Brochures</h2>
+
+    <div id="brochure-section" style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 20px;">
+
+        <!-- Brochure 1 -->
+        <div class="brochure-card" style="background: white; padding: 15px; width: 250px; border-radius: 8px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+            <h3>Brochure 1</h3>
+            <iframe src="public/brochure1.pdf" width="100%" height="200px" style="border: none; border-radius: 5px;"></iframe>
+            <a href="public/brochure1.pdf" download 
+            style="display: inline-block; margin-top: 12px; padding: 8px 15px; background: #007bff; color: white; 
+            text-decoration: none; border-radius: 5px;">Download</a>
+        </div>
+
+        <!-- Brochure 2 -->
+        <div class="brochure-card" style="background: white; padding: 15px; width: 250px; border-radius: 8px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+            <h3>Brochure 2</h3>
+            <iframe src="public/brochure2.pdf" width="100%" height="200px" style="border: none; border-radius: 5px;"></iframe>
+            <a href="public/brochure2.pdf" download 
+            style="display: inline-block; margin-top: 12px; padding: 8px 15px; background: #007bff; color: white; 
+            text-decoration: none; border-radius: 5px;">Download</a>
+        </div>
+
+    </div>
+    <!-- ⭐⭐⭐ Brochure Section Ends Here ⭐⭐⭐ -->
+
     <script>
         document.getElementById('certificate-form').addEventListener('submit', function(event) {
             event.preventDefault();
             
-            // Get the user's name input
             const userName = document.getElementById('name').value;
             if (!userName) {
                 alert("Please enter your name!");
                 return;
             }
 
-            // Call the function to generate the certificate
             generateCertificate(userName);
         });
 
@@ -136,53 +161,43 @@
             const canvas = document.getElementById('certificate-canvas');
             const ctx = canvas.getContext('2d');
             
-            // Load the certificate image
             const certificateImage = new Image();
             certificateImage.onload = function() {
-                console.log("Certificate image loaded successfully.");
-
-                // Set the canvas size to match the certificate image
                 canvas.width = certificateImage.width;
                 canvas.height = certificateImage.height;
 
-                // Draw the certificate image on the canvas
                 ctx.drawImage(certificateImage, 0, 0);
 
-                // Set the font properties for the name
                 ctx.font = '30px Arial';
                 ctx.fillStyle = 'black';
                 ctx.textAlign = 'center';
 
-                // Adjust the vertical position dynamically
                 const textX = canvas.width / 2;
                 const textY = canvas.height * 0.48;
 
-                // Overlay the user's name on the certificate
                 ctx.fillText(userName, textX, textY);
 
-                // Display the generated image
                 const imgElement = document.getElementById('certificate-image');
                 imgElement.src = canvas.toDataURL('image/png');
                 imgElement.style.display = 'block';
 
-                // Enable the download link
                 const downloadLink = document.getElementById('download-link');
                 downloadLink.href = canvas.toDataURL('image/png');
                 downloadLink.style.display = 'inline';
             };
 
-            // Handle errors if the image fails to load
             certificateImage.onerror = function() {
-                console.error("Error loading the certificate image.");
-                alert("Error loading the certificate image. Please check the image path.");
+                alert("Error loading certificate image. Check the image path.");
             };
 
-            // Set the image source (ensure path is correct)
-            certificateImage.src = '/public/certificateNew.jpg';  // Update with the correct image path
+            certificateImage.src = '/public/certificateNew.jpg';
         }
     </script>
+
 </body>
 </html>
+
+
 
 
 
